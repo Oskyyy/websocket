@@ -6,17 +6,20 @@ const userNameInput = document.getElementById('username');
 const messageContentInput = document.getElementById('message-content');
 
 const socket = io();
-socket.on('message', event => addMessage(event.author, event.content))
+socket.on('message', event => addMessage(event.author, event.content));
+socket.on('join', name => addMessage('Chat Bot', `<i><b>${name}</b> has joined the conversation!</i>`));
+socket.on('leave', name => addMessage('Chat Bot', `<i><b>${name}</b> has left the conversation!</i>`));
 
 let userName = '';
 
 login = (event) => {
-  event.preventDefault();
+  event.preventDefault()
   if(!userNameInput.value){
     event.preventDefault();
     alert('Enter your name'); 
   } else{
     userName = userNameInput.value;
+    socket.emit('join',  userName )
     loginForm.classList.remove('show');
     messagesSection.classList.add('show');
   };    
